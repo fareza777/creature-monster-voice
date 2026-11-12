@@ -123,6 +123,13 @@ export class SpecimenScene {
   /** the head swap: the old head sinks and the new one rises (0 hidden … 1 in place) */
   private reveal = 1;
   onReady: (() => void) | null = null;
+  /** a render is running: draw a frame a second so the render worker gets the CPU */
+  private busy = false;
+  private lastDraw = 0;
+
+  setBusy(on: boolean): void {
+    this.busy = on;
+  }
 
   constructor(private host: HTMLElement, private frameSource: () => Float32Array | null) {
     const r = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
@@ -436,6 +443,10 @@ export class SpecimenScene {
 
   private frame(): void {
     const now = performance.now();
+    if (this.busy && now - this.lastDraw < 1000) return;
+    // 60 fps while it speaks, 30 at rest (half the GPU and CPU on a phone)
+    if (!this.frameSource() && now - this.lastDraw < 30) return;
+    this.lastDraw = now;
     const dt = Math.min(0.05, (now - this.lastT) / 1000);
     this.lastT = now;
     const time = now / 1000;

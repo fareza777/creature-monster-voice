@@ -25,10 +25,12 @@ export async function initNative(): Promise<void> {
     /* not available on every device */
   }
   CapApp.addListener("pause", () => {
+    audio.paused = true;
     audio.stop(false);
     audio.ctx?.suspend().catch(() => undefined);
   });
   CapApp.addListener("resume", () => {
+    audio.paused = false;
     audio.ctx?.resume().catch(() => undefined);
   });
   SplashScreen.hide().catch(() => undefined);

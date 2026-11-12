@@ -46,6 +46,10 @@ export function Stage() {
   useEffect(() => {
     scene?.setHead(kind);
   }, [kind]);
+  const incubating = useApp((s) => !!s.busy);
+  useEffect(() => {
+    scene?.setBusy(incubating);
+  }, [incubating]);
   return (
     <div className="stage" ref={host}>
       {!ready && <div className="stage-loading">Sculpting your specimen…</div>}

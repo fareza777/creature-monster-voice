@@ -46,6 +46,8 @@ class AudioRuntime {
   private playStart = 0;
   private playOffset = 0;
   private stream: Stream | null = null;
+  /** the app is in the background (lifecycle.ts): do not fight the suspend */
+  paused = false;
   /** gaps in streamed playback (the render fell behind), for device diagnostics */
   underruns = 0;
   private endListeners = new Set<Listener>();
@@ -61,13 +63,37 @@ class AudioRuntime {
     return this.ctx?.state === "running";
   }
 
+  /** Android pauses audio without a gesture, on audio-focus loss and in the background: wake
+   *  it on every touch and before every playback, so a suspended context never stays silent. */
+  private wakeBound = false;
+  private bindWake(): void {
+    if (this.wakeBound) return;
+    this.wakeBound = true;
+    const wake = () => {
+      if (this.ctx && this.ctx.state !== "running" && !document.hidden) this.ctx.resume().catch(() => undefined);
+    };
+    for (const ev of ["pointerdown", "touchend", "keydown"]) window.addEventListener(ev, wake, { capture: true, passive: true });
+    document.addEventListener("visibilitychange", wake);
+  }
+
+  private async ensureRunning(): Promise<void> {
+    const ctx = this.ctx;
+    if (!ctx || ctx.state === "running") return;
+    await Promise.race([ctx.resume().catch(() => undefined), new Promise((r) => setTimeout(r, 400))]);
+  }
+
   /** Create (or resume) the context and the live voice. Call from a user gesture. */
   start(): Promise<void> {
+    this.bindWake();
     if (this.ctx && this.voice) return this.ctx.resume();
     if (this.starting) return this.starting;
     this.starting = (async () => {
       const ctx = new AudioContext({ latencyHint: "interactive", sampleRate: 48000 });
       this.ctx = ctx;
+      // came back suspended (focus loss, a call): try again while the app is in front
+      ctx.onstatechange = () => {
+        if (ctx.state === "suspended" && !document.hidden && !this.paused) ctx.resume().catch(() => undefined);
+      };
       await ctx.audioWorklet.addModule(voiceUrl);
       await ctx.audioWorklet.addModule(micUrl);
       const master = ctx.createGain();
@@ -174,6 +200,7 @@ class AudioRuntime {
 
   async play(clip: Clip, offset = 0): Promise<void> {
     await this.start();
+    await this.ensureRunning();
     const ctx = this.ctx!;
     this.stop(false);
     const buf = ctx.createBuffer(1, clip.pcm.length, clip.meta.sampleRate);
@@ -288,6 +315,7 @@ class AudioRuntime {
     const rate = rendered / Math.max(0.05, (performance.now() - st.t0) / 1000);
     const remainingRender = (total - rendered) / Math.max(0.05, rate);
     if (rendered >= 0.5 && remainingRender * 1.25 < total - 0.5) {
+      this.ensureRunning();
       st.started = true;
       st.nextTime = this.ctx.currentTime + 0.06;
       this.playStart = st.nextTime;
