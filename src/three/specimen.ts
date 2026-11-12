@@ -145,14 +145,14 @@ export class SpecimenScene {
     // studio lighting: a generated room environment (offline) + key, rim and fill
     const pmrem = new THREE.PMREMGenerator(r);
     this.scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
-    this.scene.environmentIntensity = 0.55;
-    const key = new THREE.DirectionalLight(0xfff1e0, 2.6);
+    this.scene.environmentIntensity = 0.45;
+    const key = new THREE.DirectionalLight(0xfff1e0, 3.0);
     key.position.set(-3, 5, 4);
     const rim = new THREE.DirectionalLight(0xb9a6ff, 2.4);
     rim.position.set(3, 3, -4);
     const rim2 = new THREE.DirectionalLight(0x9ff3d1, 1.2);
     rim2.position.set(-4, 2, -3);
-    const fill = new THREE.HemisphereLight(0xffffff, 0xe9e2f5, 0.4);
+    const fill = new THREE.HemisphereLight(0xffffff, 0xe9e2f5, 0.28);
     this.scene.add(key, rim, rim2, fill);
 
     this.scene.add(this.root);
@@ -269,7 +269,7 @@ export class SpecimenScene {
         skin = new THREE.MeshPhysicalMaterial({
           map: orig.map,
           normalMap: orig.normalMap,
-          normalScale: orig.normalScale.clone().multiplyScalar(1.15),
+          normalScale: orig.normalScale.clone().multiplyScalar(1.5),
           vertexColors: false,
           color: LOOKS.m.color.clone(),
           roughness: 0.6,

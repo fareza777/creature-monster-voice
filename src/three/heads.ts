@@ -27,9 +27,9 @@ export const HEADS: HeadInfo[] = [
   { id: "alien", name: "Alien", emoji: "👽", cosmetics: ["Antennae", "Collar"], skin: null },
   { id: "robot", name: "Robot", emoji: "🤖", cosmetics: [], skin: null },
   { id: "beast", name: "Beast", emoji: "🐺", cosmetics: ["Tusks", "Collar"], skin: "#6e4b2f" },
-  { id: "skull", name: "Skull", emoji: "💀", cosmetics: ["Horns", "Visor"], skin: "#e9e4d8" },
+  { id: "skull", name: "Skull", emoji: "💀", cosmetics: ["Horns"], skin: "#e9e4d8" },
   { id: "pumpkin", name: "Pumpkin", emoji: "🎃", cosmetics: [], skin: "#e8590c" },
-  { id: "frank", name: "Patchwork", emoji: "🧟", cosmetics: ["Visor", "Collar"], skin: "#8fae86" },
+  { id: "frank", name: "Patchwork", emoji: "🧟", cosmetics: ["Collar"], skin: "#8fae86" },
 ];
 
 export const HEAD = Object.fromEntries(HEADS.map((h) => [h.id, h])) as Record<HeadKind, HeadInfo>;

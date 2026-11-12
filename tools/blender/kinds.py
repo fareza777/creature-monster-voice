@@ -52,11 +52,11 @@ def ogre_parts(P):
             ell_along("brow", (0.08 * s, -0.86, 1.26), (0.56 * s, -0.66, 1.42), 0.13, 0.095),
             ell_along("browOuter", (0.5 * s, -0.7, 1.4), (0.74 * s, -0.36, 1.36), 0.1, 0.08),
             ell("temple", (0.7 * s, -0.3, 1.24), (0.22, 0.3, 0.3)),
-            ell("cheek", (0.52 * s, -0.66, 0.98), (0.26, 0.2, 0.14), rot=(0, 0.25 * s, 0)),
+            ell("cheek", (0.52 * s, -0.66, 0.98), (0.22, 0.17, 0.12), rot=(0, 0.25 * s, 0)),
             ell_along("zygo", (0.55 * s, -0.6, 1.0), (0.78 * s, -0.12, 1.06), 0.09, 0.075),
             ell("noseWing", (0.15 * s, -1.05, 0.9), (0.11, 0.1, 0.09)),
             ell("snout", (0.23 * s, -0.86, 0.86), (0.18, 0.17, 0.14)),
-            ell("jaw", (0.45 * s, -0.42, 0.55), (0.26, 0.42, 0.24), rot=(0, 0, -0.25 * s)),
+            ell("jaw", (0.44 * s, -0.42, 0.55), (0.22, 0.38, 0.2), rot=(0, 0, -0.25 * s)),
             ell("gonion", (0.56 * s, -0.04, 0.64), (0.16, 0.2, 0.2)),
             ell_along("tendon", (0.52 * s, 0.1, 0.92), (0.12 * s, -0.36, 0.06), 0.1, 0.09),
         ]
@@ -199,23 +199,23 @@ def beast_parts(P):
         ell("cranium", (0, 0.22, 1.5), (0.8, 0.86, 0.72)),
         ell("occiput", (0, 0.5, 1.45), (0.68, 0.58, 0.6)),
         ell("forehead", (0, -0.36, 1.52), (0.58, 0.42, 0.38)),
-        ell_along("muzzle", (0, -0.5, 1.0), (0, -1.42, 0.86), 0.3, 0.24),
-        ell_along("bridge", (0, -0.66, 1.2), (0, -1.42, 1.0), 0.13, 0.1),
-        ell("nose", (0, -1.56, 0.98), (0.15, 0.1, 0.1)),
-        ell_along("jawLow", (0, -0.45, 0.6), (0, -1.32, MZ - 0.1), 0.2, 0.1),
-        ell("chin", (0, -1.22, MZ - 0.1), (0.14, 0.13, 0.08)),
+        ell_along("muzzle", (0, -0.5, 1.0), (0, -1.6, 0.88), 0.27, 0.22),
+        ell_along("bridge", (0, -0.66, 1.22), (0, -1.6, 1.02), 0.12, 0.09),
+        ell("nose", (0, -1.72, 0.99), (0.15, 0.11, 0.1)),
+        ell_along("jawLow", (0, -0.45, 0.6), (0, -1.5, MZ - 0.1), 0.19, 0.1),
+        ell("chin", (0, -1.4, MZ - 0.1), (0.13, 0.12, 0.08)),
         ell("neck", (0, 0.15, 0.35), (0.5, 0.48, 0.6)),
         ell("ruff", (0, 0.0, 0.62), (0.62, 0.55, 0.38)),
     ]
     for s in S:
         parts += [
             ell_along("brow", (0.08 * s, -0.82, 1.3), (0.56 * s, -0.6, 1.42), 0.13, 0.09),
-            ell_along("jowl", (0.16 * s, -0.62, MZ + 0.08), (0.12 * s, -1.4, MZ + 0.05), 0.13, 0.1),
-            ell("cheekFur", (0.52 * s, -0.42, 0.88), (0.32, 0.4, 0.34)),
-            ell("noseWing", (0.08 * s, -1.52, 0.96), (0.07, 0.07, 0.06)),
+            ell_along("jowl", (0.15 * s, -0.62, MZ + 0.08), (0.11 * s, -1.58, MZ + 0.05), 0.12, 0.09),
+            ell("cheekFur", (0.5 * s, -0.36, 0.9), (0.27, 0.34, 0.3)),
+            ell("noseWing", (0.08 * s, -1.68, 0.97), (0.07, 0.07, 0.06)),
             ell("temple", (0.66 * s, -0.2, 1.3), (0.22, 0.3, 0.28)),
         ]
-        ear = leaf("ear", (0.26, 0.08, 0.5))
+        ear = leaf("ear", (0.27, 0.08, 0.6))
         orient(ear, (0.52 * s, 0.22, 2.0), (0.35 * s, 0.15, 1), (0.5 * s, -1, 0))
         parts.append(ear)
     return parts
@@ -227,7 +227,7 @@ def beast_detail(P, x, y, z, d, cav, groove):
     down = vnoise(np.c_[x * 26, y * 26, z * 4.5], 61) + 0.5 * vnoise(np.c_[x * 55, y * 55, z * 9], 62)
     back = vnoise(np.c_[x * 30, y * 4.5, z * 30], 63) + 0.5 * vnoise(np.c_[x * 60, y * 9, z * 60], 64)
     n = down * (1 - snout) + back * snout
-    nose = np.exp(-((x / 0.2) ** 2 + ((y + 1.56) / 0.14) ** 2 + ((z - 0.98) / 0.14) ** 2))
+    nose = np.exp(-((x / 0.2) ** 2 + ((y + 1.72) / 0.14) ** 2 + ((z - 0.99) / 0.14) ** 2))
     lips = np.exp(-(((z - P.mouth_z) / 0.06) ** 2)) * sstep(-0.6, -0.8, y)
     m = np.clip(1 - nose * 1.5 - lips, 0, 1)
     d += 0.009 * n * m
@@ -405,17 +405,17 @@ KINDS = {
     ),
     "robot": dict(
         parts=robot_parts, extra_detail=robot_detail, extras=robot_extras, smile=0.0, lens=(0.3, 0.5, 0.026), wrap=0.3, lens_y0=-0.95, teeth_y0=-0.92, lip_y=-0.96,
-        curl=0.0, jaw_angle=22.0, fillet=0.03, smooth=2, eye_r=0.12, eye_x=0.3, eye_z=1.12, eye_tilt=0.0, eye_a=0.115, eye_b=0.115, eye_depth=0.6, eye_cut="round", eye_style="lens",
+        curl=0.0, jaw_angle=22.0, fillet=0.03, smooth=2, eye_r=0.15, eye_x=0.3, eye_z=1.12, eye_tilt=0.0, eye_a=0.145, eye_b=0.145, eye_depth=0.6, eye_cut="round", eye_style="lens",
         sclera=(0.08, 0.08, 0.1), nostrils=[], tongue=None, teeth="grill", inside=(0.05, 0.05, 0.07),
         detail=dict(hollows=0, lumps=0, forehead=0, frown=0, lids=0, crow=0, naso=0, lips=0, neck=0, scales=0, warts=0, veins=0, grain=0),
     ),
     "beast": dict(
-        parts=beast_parts, extra_detail=beast_detail, mouth_z=0.72, smile=0.0, lens=(0.26, 0.62, 0.032), wrap=10.0, lens_y0=-1.3, teeth_y0=-1.4, lip_y=-1.6,
+        parts=beast_parts, extra_detail=beast_detail, mouth_z=0.72, smile=0.0, lens=(0.26, 0.62, 0.032), wrap=10.0, lens_y0=-1.46, teeth_y0=-1.56, lip_y=-1.76,
         curl=0.02, fang_x=0.09, jaw_angle=18.0, eye_r=0.12, eye_x=0.36, eye_z=1.2, eye_tilt=0.25, eye_a=0.13, eye_b=0.06, eye_depth=0.8, eye_style="round",
-        sclera=(0.6, 0.35, 0.05), nostrils=[dict(x=0.07, z=0.99, scale=(0.035, 0.06, 0.025), rot=(-0.2, 0, 0.4), inset=0.03)], nose_z=1.0, brow_z=1.36,
-        bag=((0, -0.95, -0.02), (0.22, 0.55, 0.12), -1.45), tongue=((0, -0.92, -0.045), (0.13, 0.36, 0.045)), teeth="canines",
+        sclera=(0.6, 0.35, 0.05), nostrils=[dict(x=0.07, z=1.0, scale=(0.035, 0.06, 0.025), rot=(-0.2, 0, 0.4), inset=0.03)], nose_z=1.0, brow_z=1.36,
+        bag=((0, -1.05, -0.02), (0.21, 0.62, 0.12), -1.6), tongue=((0, -1.02, -0.045), (0.13, 0.4, 0.045)), teeth="canines",
         detail=dict(hollows=0, lumps=0.6, forehead=0.3, frown=1, lids=1, crow=0.5, naso=0, lips=0.5, neck=0, scales=0, warts=0, veins=0, grain=0.7),
-        dark=[((0, -1.56, 0.98), (0.2, 0.14, 0.14), 0.75), ((0, -1.0, 0.72), (0.3, 0.7, 0.05), 0.5)],
+        dark=[((0, -1.72, 0.99), (0.2, 0.14, 0.14), 0.8), ((0, -1.1, 0.72), (0.3, 0.8, 0.05), 0.5), ((0, -0.2, 1.9), (0.8, 0.9, 0.5), 0.25)],
     ),
     "skull": dict(
         parts=skull_parts, extra_detail=skull_detail, smile=0.08, lens=(0.34, 0.55, 0.026), wrap=1.2, lens_y0=-0.85, teeth_y0=-0.865, lip_y=-0.95,
@@ -435,6 +435,6 @@ KINDS = {
         parts=frank_parts, extra_detail=frank_detail, extras=frank_extras, smile=-0.05, lens=(0.3, 0.6, 0.024), wrap=1.4, teeth_y0=-0.97, lip_y=-1.08,
         curl=0.0, eye_r=0.13, eye_x=0.3, eye_z=1.12, eye_tilt=-0.06, eye_a=0.13, eye_b=0.05, eye_depth=0.85, eye_style="round", sclera=(0.85, 0.8, 0.62),
         nostrils=[dict(x=0.045, z=0.89, scale=(0.022, 0.05, 0.018), rot=(-0.5, 0, 0.2), inset=0.03)], teeth="flat",
-        detail=dict(hollows=1.2, lumps=0.6, forehead=0.8, frown=0.8, lids=1, crow=0.6, naso=1, lips=1, neck=1, scales=0, warts=0.2, veins=0.8, grain=1),
+        detail=dict(hollows=0.6, lumps=0.5, forehead=0.8, frown=0.8, lids=1, crow=0.6, naso=1, lips=1, neck=1, scales=0, warts=0.2, veins=0.8, grain=1),
     ),
 }

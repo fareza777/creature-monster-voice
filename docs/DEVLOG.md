@@ -61,6 +61,25 @@
 - Open polish items: the pumpkin's eyes read as yellow balls instead of candle light, the beast's
   muzzle is short, the robot's eyes are small, the ogre's cheeks are still lumpy, and the debug
   APK is ~32 MB with eight heads.
+
+### Afternoon: no sound on the phone, model polish
+- Bug: a clip rendered but nothing played. The AudioContext was `suspended` (peak of the clip
+  0.50, so the audio itself was fine). It had been started without a touch, and nothing ever
+  resumed it. Fix (`src/audio/audio.ts`, `src/platform/lifecycle.ts`): resume on every touch, on
+  visibility, on `statechange` while in front, and before every playback; the lifecycle pause
+  sets `audio.paused` so the app does not fight the background suspend.
+- Verified on the phone with real `adb input tap`s on Laugh: context `running`, 0 underruns,
+  4.5 s laugh.
+- Render latency on the phone is still long (25 s for the 4.5 s laugh, 37 s right after launch
+  while CMUdict loads). The phone was under memory pressure (64 MB free, 2.2 GB swap) and the
+  WebView GPU/raster threads used ~60% CPU at rest. Now the 3D view draws once a second while
+  incubating and at 30 fps at rest (60 while it speaks). Latency not re-measured after this. Open.
+- Models: ogre jaw and cheeks slimmer, beast muzzle and ears longer with a dark nose pad and a
+  darker crown, bigger robot eyes, softer patchwork hollows, matte horns, stronger cavity and
+  occlusion contrast in the detail maps; the app shows the normal maps 1.5x stronger with a
+  harder key light and less fill. The skull and patchwork heads no longer grow the visor.
+  All eight rebuilt (2.1–2.5 MB each). Checked on the phone: installs and renders (skull).
+
 ## 2026-11-11 — Specimen fillet pass shipped to the device
 
 ### What changed

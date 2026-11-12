@@ -332,7 +332,7 @@ def skin_colours(hi):
     mott = 0.1 * fbm(co * 4.5, 3, 7) + 0.05 * fbm(co * 14, 2, 9)
     if KIND == "robot":
         under, top, mott = under * 0.3, top * 0.4, mott * 0.25
-    lum = (0.78 + under - top + mott) * (0.38 + 0.62 * occ ** 1.5) * (1 - 0.55 * cav)
+    lum = (0.8 + under - top + mott) * (0.3 + 0.7 * occ ** 1.8) * (1 - 0.7 * cav)
     for c, r, amt in P.dark:
         lum *= 1 - amt * np.exp(-(((x - c[0]) / r[0]) ** 2 + ((y - c[1]) / r[1]) ** 2 + ((z - c[2]) / r[2]) ** 2))
     flush = np.zeros(n)
@@ -851,7 +851,7 @@ def main():
     iris = material("Iris", P.iris, rough=0.2, emit=(1.0, 0.45, 0.0), emit_strength=0.6, coat=1.0)
     pupil = material("Pupil", (0.01, 0.01, 0.012), rough=0.08, coat=1.0)
     tongue_m = material("Tongue", (0.62, 0.12, 0.2), rough=0.4, subsurface=0.2)
-    horn_m = gradient_material("Horn", rough=0.38, coat=0.45)
+    horn_m = gradient_material("Horn", rough=0.55, coat=0.15)
     metal = material("Metal", (0.8, 0.82, 0.86), rough=0.22, metal=1.0)
     glow = material("Glow", (0.2, 1.0, 0.6), rough=0.3, emit=(0.2, 1.0, 0.6), emit_strength=4)
     bulb = material("Bulb", (0.6, 0.3, 1.0), rough=0.2, emit=(0.6, 0.3, 1.0), emit_strength=5)
