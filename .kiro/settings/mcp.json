@@ -1,0 +1,18 @@
+{
+  "mcpServers": {
+    "creature-adb": {
+      "command": "node",
+      "args": ["tools/mcp/adb-mcp.mjs"],
+      "env": {},
+      "disabled": false,
+      "autoApprove": ["devices", "screenshot", "console_logs", "perf_stats"]
+    },
+    "blender": {
+      "command": "uvx",
+      "args": ["mcp-for-blender"],
+      "env": {},
+      "disabled": true,
+      "autoApprove": []
+    }
+  }
+}
