@@ -48,6 +48,6 @@ Status legend: `[x]` done and verified, `[ ]` open. Each task cites requirements
 
 ## Phase 7 — Kiroween deliverables
 - [x] 7.1 Kiro hooks + MCP ADB server (process)
-- [ ] 7.2 README, CONTRIBUTIONS, THIRD_PARTY_NOTICES, docs/PROCESS.md, bug log (R11.4)
+- [x] 7.2 README, CONTRIBUTIONS, THIRD_PARTY_NOTICES, docs/PROCESS.md, bug log (R11.4)
 - [ ] 7.3 Demo video < 3 min + script (R11.3)
 - [x] 7.4 Publish to the public repo (R11.4)
