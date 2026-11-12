@@ -34,8 +34,8 @@ export function LogoMark() {
     <svg className="logo-mark" viewBox="0 0 64 64">
       <defs>
         <linearGradient id="lg" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor="#0fb47e" />
-          <stop offset="1" stopColor="#6d4aff" />
+          <stop offset="0" stopColor="#39ff88" />
+          <stop offset="1" stopColor="#a45bff" />
         </linearGradient>
       </defs>
       <path d="M22 6h20M26 6v16L12 48a6 6 0 0 0 5.3 9h29.4A6 6 0 0 0 52 48L38 22V6" fill="none" stroke="url(#lg)" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />

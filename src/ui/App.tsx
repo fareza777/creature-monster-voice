@@ -82,6 +82,7 @@ export function App() {
   return (
     <div className="app" data-screen={screen}>
       <Particles />
+      <div className="vignette" />
       <Header />
       <Stage />
       <main className="content" key={screen}>

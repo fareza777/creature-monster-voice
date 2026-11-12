@@ -19,8 +19,8 @@ export function onBackButton(handler: () => boolean): () => void {
 export async function initNative(): Promise<void> {
   if (!isNative) return;
   try {
-    await StatusBar.setStyle({ style: Style.Light });
-    await StatusBar.setBackgroundColor({ color: "#f6f4ef" });
+    await StatusBar.setStyle({ style: Style.Dark });
+    await StatusBar.setBackgroundColor({ color: "#05070d" });
   } catch {
     /* not available on every device */
   }

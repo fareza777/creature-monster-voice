@@ -16,8 +16,9 @@ spliced with creature "DNA" by our own Rust DSP. No samples, no cloud, no paid A
 1. **Creature DNA Mixer** — blend Monster, Alien, Robot, Human and Animal strands; the blend
    drives the physical voice source and a Rust effect rack, and splices a real animal airway
    (songbird, seal, alligator, elephant) into the voice.
-2. **Interactive 3D Voice Anatomy** — Three.js hologram of the lungs, vocal folds, tract tube,
-   tongue, jaw, lips and velum, all moving from engine telemetry in real time.
+2. **Interactive 3D Specimen** — eight sculpted creature heads on a glowing pedestal; jaw, lips
+   and tongue move from engine telemetry in real time, and the DNA grows horns, antennae, a visor
+   or a collar. (The earlier airway-anatomy hologram was removed: no anatomy diagrams.)
 3. **Text-to-Voice** — English (CMUdict), Indonesian, Spanish, raw IPA, and "Creature Tongue".
 4. **Singing Studio**, **Beatbox Maker**, **Sound FX Generator**.
 5. **Voice Morphing** — morph between two characters, and morph your own microphone voice.

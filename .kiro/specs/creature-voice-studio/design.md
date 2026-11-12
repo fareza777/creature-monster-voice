@@ -64,8 +64,13 @@ sound. Live interaction (Incubate pad, beat pads, beat loop) stays on the workle
 | reverb | cave 0.25m + 0.25a + 0.1 |
 | animal splice | species layer gain 0.9n, gated by the voice envelope |
 
-## 4. 3D Voice Anatomy (`src/three/`)
-- Scene: hologram head (Fresnel shader, scanlines), skull/jaw meshes, tract as a `TubeGeometry`
+## 4. 3D Specimen (`src/three/`)
+> Revised 2026-11-12: the anatomy hologram below was the first design and has been removed.
+> Current scene: one of eight sculpted heads (`public/models/<kind>.glb`, built by
+> `tools/blender/`) on an obsidian plinth; morph targets follow the articulator telemetry; the
+> eyes blink and track the finger; the ring and a floor glow pool follow the level. See
+> `.kiro/steering/specimen-3d.md`. The original design is kept for the record:
+- Scene (original, removed): hologram head (Fresnel shader, scanlines), skull/jaw meshes, tract as a `TubeGeometry`
   whose ring radii are rewritten per frame from `phAreas`/`orAreas` (r = √(A/π)), nasal branch
   scaled by `velumPort`, tongue as a deformable capsule placed from `tbX/tbY/ttX/ttY`, jaw pivot
   rotation from `jaw`, lips as two arcs scaled by `lipAp/lipWidth/lipProt`, vocal folds as two
@@ -80,10 +85,14 @@ sound. Live interaction (Incubate pad, beat pads, beat loop) stays on the workle
 
 ## 5. UI
 Screens: Lab (home, hologram + quick speak), DNA Mixer, Speak, Sing, Beatbox, SFX, Morph,
-Editor, Projects, About. Bottom dock with 5 primary tabs + "More" sheet. Design tokens: toxic
-green `#39ff88`, plasma cyan `#2de2ff`, ultraviolet `#a45bff`, blood `#ff3b5c`, near-black
-`#05070d`. Orbitron (OFL) for display, system UI font for body. Particle field canvas behind
-everything, throttled to 30 fps.
+Editor, Projects, About. Bottom dock with 5 primary tabs + "More" sheet. "Night Lab" design
+tokens (all in `:root` of `src/ui/styles.css`; components use only variables): near-black
+`--bg #05070d`, glass panels, ultraviolet `--violet #a45bff` (primary actions, selection), toxic
+green `--toxic #39ff88` (live state: readouts, active chips/tabs, Splice, progress, incubator),
+plasma cyan `#2de2ff`, blood `#ff3b5c`, amber, pumpkin. Text `--ink`/`--text`/`--dim`/`--faint`
+keep ≥ 4.5:1 on the background. Space Grotesk (OFL) for display, Inter for body, a monospace
+face for lab readouts. Particle field (spores) canvas behind everything, throttled to 30 fps,
+plus a vignette.
 
 ## 6. Persistence and export
 - Projects: IndexedDB (`cvs-projects`) — JSON settings + clip PCM as `Float32Array` blobs.

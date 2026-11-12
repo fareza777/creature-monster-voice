@@ -13,7 +13,7 @@ src/engine/              wasm loader, wire format, engine facade, render-worker 
 src/audio/               AudioContext, live worklet, mic morph, playback with telemetry sync
 src/worklet/             AudioWorklet processors (engine+rack live, mic morph)
 src/workers/             render worker (offline render, MP3 encode)
-src/three/               3D Voice Anatomy hologram (original)
+src/three/               3D Specimen: heads, pedestal, lip-sync (original)
 src/ui/                  screens, components, styles (original)
 src/store/               zustand stores, project persistence
 public/data/             CMUdict (BSD-style licence in CMUDICT-LICENSE.txt)

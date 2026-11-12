@@ -24,12 +24,16 @@ Format: EARS ("WHEN … THE SYSTEM SHALL …"). Every requirement maps to tasks 
   in real time, with vowel control by dragging.
 - R2.5 THE SYSTEM SHALL let the user save a specimen as a character preset.
 
-## R3 Interactive 3D Voice Anatomy
-- R3.1 THE SYSTEM SHALL render a Three.js hologram with lungs, trachea, vocal folds, pharynx and
-  oral tube, nasal cavity/velum, tongue, jaw and lips.
-- R3.2 WHILE audio plays (live or rendered) THE SYSTEM SHALL animate the tube radii from the area
-  function, the jaw/lips/tongue/velum from articulator telemetry, the folds from glottal area and
-  the lungs from lung pressure, at ≥ 30 fps on a Snapdragon 680 class device.
+## R3 Interactive 3D Specimen
+> Revised 2026-11-12: the first version was an anatomy hologram of the airway (lungs, folds,
+> tract tube). After device testing it was removed (it read as a diagram, not a creature) and
+> replaced by eight sculpted heads. R3.1 and R3.2 below are the current requirements.
+- R3.1 THE SYSTEM SHALL render a sculpted 3D creature head on a pedestal with Three.js: eight
+  head kinds (ogre, demon, alien, robot, beast, skull, pumpkin, patchwork), PBR materials with
+  baked normal and detail maps, within the triangle/texture budget of `specimen-3d.md`.
+- R3.2 WHILE audio plays (live or rendered) THE SYSTEM SHALL move the jaw, lips and tongue from
+  the articulator telemetry (or the output level for sounds without articulation) and make the
+  pedestal ring and its floor glow follow the level, at ≥ 30 fps on a Snapdragon 680 class device.
 - R3.3 THE SYSTEM SHALL support one-finger orbit, pinch zoom and tap-to-inspect organ labels.
 - R3.4 THE SYSTEM SHALL morph the head's look with the DNA (horns, fangs, antenna, visor).
 
@@ -69,8 +73,10 @@ Format: EARS ("WHEN … THE SYSTEM SHALL …"). Every requirement maps to tasks 
   folder and open the Android share sheet.
 
 ## R10 UX, performance, quality
-- R10.1 THE SYSTEM SHALL use a futuristic monster-lab theme: holograms, particles, glow, glitch
-  transitions, haptics, 44 dp touch targets, safe-area aware layout, portrait first.
+- R10.1 THE SYSTEM SHALL use a dark "Night Lab" monster-lab theme (near-black base, ultraviolet
+  and toxic-green light, glow, drifting spores, lab-monitor panels and readouts) built from design
+  tokens only, with text contrast of at least WCAG AA for body text, plus haptics, 44 dp touch
+  targets, a safe-area aware layout and portrait first.
 - R10.2 Cold start to interactive SHALL be < 4 s on the test device; UI SHALL stay ≥ 30 fps.
 - R10.3 All UI text SHALL be English.
 - R10.4 THE SYSTEM SHALL show licences/attribution in an About screen.

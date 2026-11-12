@@ -1,7 +1,8 @@
 /**
  * The Specimen: a sculpted monster bust (modelled procedurally in Blender, tools/blender/
  * build_specimen.py, with its skin detail baked into a normal map and a neutral detail map)
- * rendered with physically based materials in a light studio, lip-synced to the voice engine
+ * rendered with physically based materials in a dark "Night Lab" (ultraviolet and toxic-green rim
+ * light, a glow pool under the plinth), lip-synced to the voice engine
  * and dressed by its DNA.
  *
  *  - Face: morph targets jawOpen / mouthWide / mouthRound / snarl / browDown follow the engine's
@@ -53,9 +54,25 @@ function shadowTexture(): THREE.Texture {
   c.width = c.height = 128;
   const g = c.getContext("2d")!;
   const grad = g.createRadialGradient(64, 64, 4, 64, 64, 64);
-  grad.addColorStop(0, "rgba(40,30,70,0.42)");
-  grad.addColorStop(0.5, "rgba(40,30,70,0.16)");
-  grad.addColorStop(1, "rgba(40,30,70,0)");
+  grad.addColorStop(0, "rgba(0,0,0,0.7)");
+  grad.addColorStop(0.5, "rgba(0,0,0,0.3)");
+  grad.addColorStop(1, "rgba(0,0,0,0)");
+  g.fillStyle = grad;
+  g.fillRect(0, 0, 128, 128);
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace;
+  return t;
+}
+
+/** A soft radial glow (white, tinted by the material colour), additive. */
+function glowTexture(): THREE.Texture {
+  const c = document.createElement("canvas");
+  c.width = c.height = 128;
+  const g = c.getContext("2d")!;
+  const grad = g.createRadialGradient(64, 64, 0, 64, 64, 64);
+  grad.addColorStop(0, "rgba(255,255,255,0.55)");
+  grad.addColorStop(0.35, "rgba(255,255,255,0.18)");
+  grad.addColorStop(1, "rgba(255,255,255,0)");
   g.fillStyle = grad;
   g.fillRect(0, 0, 128, 128);
   const t = new THREE.CanvasTexture(c);
@@ -94,6 +111,8 @@ export class SpecimenScene {
   private skin: THREE.MeshPhysicalMaterial | null = null;
   private iris: THREE.MeshPhysicalMaterial | null = null;
   private ring: THREE.MeshStandardMaterial | null = null;
+  /** additive light pool on the floor; follows the ring colour and the voice level */
+  private pool: THREE.MeshBasicMaterial | null = null;
   private cosmetics: Cosmetic[] = [];
   private pivot = new THREE.Vector3(0, 0.86, -0.05);
   private jawAngle = 0.5;
@@ -142,17 +161,18 @@ export class SpecimenScene {
     host.appendChild(r.domElement);
     r.domElement.style.touchAction = "none";
 
-    // studio lighting: a generated room environment (offline) + key, rim and fill
+    // night-lab lighting: a dim generated room environment (offline), a cool key light, and
+    // ultraviolet + toxic-green rims that carve the silhouette out of the dark
     const pmrem = new THREE.PMREMGenerator(r);
     this.scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
-    this.scene.environmentIntensity = 0.45;
-    const key = new THREE.DirectionalLight(0xfff1e0, 3.0);
+    this.scene.environmentIntensity = 0.32;
+    const key = new THREE.DirectionalLight(0xf3ecff, 2.7);
     key.position.set(-3, 5, 4);
-    const rim = new THREE.DirectionalLight(0xb9a6ff, 2.4);
+    const rim = new THREE.DirectionalLight(0xa45bff, 3.4);
     rim.position.set(3, 3, -4);
-    const rim2 = new THREE.DirectionalLight(0x9ff3d1, 1.2);
+    const rim2 = new THREE.DirectionalLight(0x39ff88, 1.8);
     rim2.position.set(-4, 2, -3);
-    const fill = new THREE.HemisphereLight(0xffffff, 0xe9e2f5, 0.28);
+    const fill = new THREE.HemisphereLight(0xbfc6ff, 0x05070d, 0.3);
     this.scene.add(key, rim, rim2, fill);
 
     this.scene.add(this.root);
@@ -173,11 +193,11 @@ export class SpecimenScene {
     this.start();
   }
 
-  /** A ceramic plinth with gold trims and a ring that glows with the voice. */
+  /** An obsidian plinth with brass trims, a ring that glows with the voice and a glow pool below. */
   private buildPedestal(): void {
-    const ceramic = new THREE.MeshPhysicalMaterial({ color: 0xf7f5fb, roughness: 0.32, clearcoat: 0.8, clearcoatRoughness: 0.2 });
-    const dark = new THREE.MeshPhysicalMaterial({ color: 0x1d1830, roughness: 0.4, metalness: 0.2, clearcoat: 1, clearcoatRoughness: 0.15 });
-    const gold = new THREE.MeshPhysicalMaterial({ color: 0xd8b26a, metalness: 1, roughness: 0.28 });
+    const ceramic = new THREE.MeshPhysicalMaterial({ color: 0x1a1f2e, roughness: 0.3, metalness: 0.1, clearcoat: 1, clearcoatRoughness: 0.12 });
+    const dark = new THREE.MeshPhysicalMaterial({ color: 0x0b0d16, roughness: 0.4, metalness: 0.2, clearcoat: 1, clearcoatRoughness: 0.15 });
+    const gold = new THREE.MeshPhysicalMaterial({ color: 0xc9a25a, metalness: 1, roughness: 0.32 });
     this.ring = new THREE.MeshStandardMaterial({ color: 0x0d0b14, emissive: 0x7cff6b, emissiveIntensity: 0.6, roughness: 0.4 });
     const top = new THREE.Mesh(new THREE.CylinderGeometry(0.78, 0.82, 0.08, 64), ceramic);
     top.position.y = 0.025;
@@ -197,7 +217,11 @@ export class SpecimenScene {
     const shadow = new THREE.Mesh(new THREE.PlaneGeometry(3.8, 3.8), new THREE.MeshBasicMaterial({ map: shadowTexture(), transparent: true, depthWrite: false }));
     shadow.rotation.x = -Math.PI / 2;
     shadow.position.y = -0.795;
-    this.root.add(top, trim, column, glow, foot, trim2, shadow);
+    this.pool = new THREE.MeshBasicMaterial({ map: glowTexture(), color: 0x7cff6b, transparent: true, opacity: 0.35, depthWrite: false, blending: THREE.AdditiveBlending });
+    const pool = new THREE.Mesh(new THREE.PlaneGeometry(3.2, 3.2), this.pool);
+    pool.rotation.x = -Math.PI / 2;
+    pool.position.y = -0.79;
+    this.root.add(top, trim, column, glow, foot, trim2, shadow, pool);
     this.root.position.y = 0.2;
   }
 
@@ -549,6 +573,10 @@ export class SpecimenScene {
         if (this.ring) {
           this.ring.emissive.lerp(iris, kk);
           this.ring.emissiveIntensity = 0.35 + level * 2.2;
+        }
+        if (this.pool) {
+          this.pool.color.lerp(iris, kk);
+          this.pool.opacity = 0.22 + Math.min(1, level * 1.6) * 0.5;
         }
       }
       for (const cmo of this.cosmetics) {

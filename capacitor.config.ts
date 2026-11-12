@@ -4,9 +4,9 @@ const config: CapacitorConfig = {
   appId: "com.f7developer.creaturevoicestudio",
   appName: "Creature Voice Studio",
   webDir: "dist",
-  backgroundColor: "#f6f4ef",
+  backgroundColor: "#05070d",
   android: {
-    backgroundColor: "#f6f4ef",
+    backgroundColor: "#05070d",
     allowMixedContent: false,
     captureInput: true,
   },
@@ -14,13 +14,13 @@ const config: CapacitorConfig = {
     SplashScreen: {
       launchShowDuration: 3000,
       launchAutoHide: false,
-      backgroundColor: "#f6f4ef",
+      backgroundColor: "#05070d",
       androidScaleType: "CENTER_CROP",
       showSpinner: false,
     },
     StatusBar: {
-      style: "LIGHT",
-      backgroundColor: "#f6f4ef",
+      style: "DARK",
+      backgroundColor: "#05070d",
     },
   },
 };

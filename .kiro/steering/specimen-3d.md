@@ -27,8 +27,11 @@ fileMatchPattern: ['src/three/**', 'tools/blender/**', 'public/models/**']
 - Budget for a Snapdragon 680: head ≤ 20k triangles, total ≤ 40k, each GLB ≤ 3 MB, pixel ratio
   ≤ 1.75, no shadow maps (the contact shadow is a texture), no post-processing.
 - No anatomy diagrams (airway tube, vocal folds, lungs) on the stage: the specimen is the show.
-- Light theme rendering: ACES tone mapping, `RoomEnvironment` through PMREM (generated in-app,
-  no HDR download), key + two rims + hemisphere fill.
+- Night Lab rendering: ACES tone mapping, a dim `RoomEnvironment` through PMREM (generated
+  in-app, no HDR download), a cool key light, an ultraviolet rim and a toxic-green rim, a low
+  hemisphere fill. Obsidian plinth with brass trims; the voice-reactive ring and an additive glow
+  pool on the floor take the iris colour. The canvas stays transparent: the CSS background is
+  the night.
 - Skin colour: `specimen.skin` (hex), else the head's own hide (skull, pumpkin, frank), else the
   leading creature strand's hue nudged toward the runner-up, softened by the human share. Never
   blend all five hues linearly (it turns grey).

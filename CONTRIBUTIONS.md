@@ -30,7 +30,7 @@ Upstream commit: `6259e880f5d0108b862e98cefd930aa8c5bc0dc5`.
 | `tools/blender/build_specimen.py`, `kinds.py`, `specimen_lib.py`, `tools/build-models.mjs` | Procedural Blender heads (ogre, demon, alien, robot, beast, skull, pumpkin, patchwork): voxel-fused sculpts with displaced skin detail baked to normal + detail maps, mouth/eye/nose cuts, hinge and facial shape keys, eyes, teeth, tongue, extras, DNA cosmetics, GLB export, preview renders. |
 | `src/three/specimen.ts`, `src/three/heads.ts` | PBR specimen scene: head selection and swap, telemetry lip-sync, DNA-driven skin/iris/cosmetics, blinking finger-tracking eyes, voice-reactive pedestal, touch orbit/zoom/inspect. |
 | `src/audio/audio.ts`, `src/worklet/mic.ts`, `src/workers/render.worker.ts`, `src/engine/renderer.ts` | Audio runtime: live engine+rack worklet, streaming playback, synced anatomy frames, mic morph worklet, render worker with WAV/MP3 encoding. |
-| `src/ui/**`, `src/store/**`, `src/platform/**` | The whole app UI (light premium theme), presets, songs, projects/clip vault (IndexedDB), export/share, Android lifecycle. |
+| `src/ui/**`, `src/store/**`, `src/platform/**` | The whole app UI ("Night Lab" dark theme), presets, songs, projects/clip vault (IndexedDB), export/share, Android lifecycle. |
 | `tools/mcp/adb-mcp.mjs`, `tools/device.mjs`, `tools/shots.mjs` | MCP server and helpers for ADB + DevTools device testing. |
 | `tools/make-icons.mjs`, `tools/check-licenses.mjs`, `tools/hooks/*` | Icons/splash/store art, licence gate, secret guard. |
 | `.kiro/**`, `docs/**` | Spec, steering, hooks, MCP config and documentation. |

@@ -23,7 +23,7 @@ const glyph = (scale = 1) => `
 
 const bg = (w, h) => `
 <svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}">
-  <defs><radialGradient id="bg" cx="50%" cy="38%" r="80%"><stop offset="0" stop-color="#ffffff"/><stop offset="0.6" stop-color="#f6f4ef"/><stop offset="1" stop-color="#ece7f8"/></radialGradient></defs>
+  <defs><radialGradient id="bg" cx="50%" cy="38%" r="80%"><stop offset="0" stop-color="#1a1238"/><stop offset="0.6" stop-color="#0a0e18"/><stop offset="1" stop-color="#05070d"/></radialGradient></defs>
   <rect width="100%" height="100%" fill="url(#bg)"/>
 </svg>`;
 
@@ -39,12 +39,12 @@ for (const [d, k] of Object.entries(dens)) {
   const f = Math.round(108 * k);
   await sharp(Buffer.from(glyph(0.62))).resize(f, f).png().toFile(`${dir}/ic_launcher_foreground.png`);
 }
-writeFileSync(`${RES}/values/ic_launcher_background.xml`, `<?xml version="1.0" encoding="utf-8"?>\n<resources>\n    <color name="ic_launcher_background">#F6F4EF</color>\n</resources>\n`);
+writeFileSync(`${RES}/values/ic_launcher_background.xml`, `<?xml version="1.0" encoding="utf-8"?>\n<resources>\n    <color name="ic_launcher_background">#05070D</color>\n</resources>\n`);
 
 // splash screens (portrait and landscape)
 const splash = async (w, h, out) => {
   const logo = Math.round(Math.min(w, h) * 0.42);
-  const title = Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${Math.round(h * 0.12)}"><text x="50%" y="45%" text-anchor="middle" font-family="Segoe UI, Arial" font-weight="800" font-size="${Math.round(Math.min(w, h) * 0.055)}" letter-spacing="${Math.round(Math.min(w, h) * 0.008)}" fill="#17142a">CREATURE VOICE STUDIO</text><text x="50%" y="85%" text-anchor="middle" font-family="Segoe UI, Arial" font-size="${Math.round(Math.min(w, h) * 0.03)}" fill="#6d4aff">MONSTER VOICE LABORATORY</text></svg>`);
+  const title = Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${Math.round(h * 0.12)}"><text x="50%" y="45%" text-anchor="middle" font-family="Segoe UI, Arial" font-weight="800" font-size="${Math.round(Math.min(w, h) * 0.055)}" letter-spacing="${Math.round(Math.min(w, h) * 0.008)}" fill="#f1f3ff">CREATURE VOICE STUDIO</text><text x="50%" y="85%" text-anchor="middle" font-family="Segoe UI, Arial" font-size="${Math.round(Math.min(w, h) * 0.03)}" fill="#39ff88">MONSTER VOICE LABORATORY</text></svg>`);
   const g = await sharp(Buffer.from(glyph(1))).resize(logo, logo).png().toBuffer();
   await sharp(Buffer.from(bg(w, h)))
     .composite([
@@ -66,9 +66,9 @@ mkdirSync("store", { recursive: true });
 await sharp(icon).resize(512, 512).png().toFile("store/icon-512.png");
 const fg = await sharp(Buffer.from(glyph(1))).resize(380, 380).png().toBuffer();
 const feature = Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="500">
-  <text x="420" y="215" font-family="Segoe UI, Arial" font-weight="900" font-size="58" fill="#17142a" letter-spacing="3">CREATURE VOICE</text>
-  <text x="420" y="285" font-family="Segoe UI, Arial" font-weight="900" font-size="58" fill="#6d4aff" letter-spacing="3">STUDIO</text>
-  <text x="422" y="335" font-family="Segoe UI, Arial" font-size="26" fill="#0b7d58" letter-spacing="2">Monster Voice Laboratory · 100% offline</text>
+  <text x="420" y="215" font-family="Segoe UI, Arial" font-weight="900" font-size="58" fill="#f1f3ff" letter-spacing="3">CREATURE VOICE</text>
+  <text x="420" y="285" font-family="Segoe UI, Arial" font-weight="900" font-size="58" fill="#a45bff" letter-spacing="3">STUDIO</text>
+  <text x="422" y="335" font-family="Segoe UI, Arial" font-size="26" fill="#39ff88" letter-spacing="2">Monster Voice Laboratory · 100% offline</text>
 </svg>`);
 await sharp(Buffer.from(bg(1024, 500))).composite([{ input: fg, left: 30, top: 60 }, { input: feature, left: 0, top: 0 }]).png().toFile("store/feature-1024x500.png");
 console.log("icons, splash screens and store graphics written");
