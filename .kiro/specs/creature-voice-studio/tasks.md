@@ -50,4 +50,4 @@ Status legend: `[x]` done and verified, `[ ]` open. Each task cites requirements
 - [x] 7.1 Kiro hooks + MCP ADB server (process)
 - [ ] 7.2 README, CONTRIBUTIONS, THIRD_PARTY_NOTICES, docs/PROCESS.md, bug log (R11.4)
 - [ ] 7.3 Demo video < 3 min + script (R11.3)
-- [ ] 7.4 Publish to the public repo (R11.4)
+- [x] 7.4 Publish to the public repo (R11.4)

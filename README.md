@@ -8,10 +8,11 @@ in real time.
 - 🧬 **Creature DNA Mixer**: five strands blend into one specimen. The DNA drives the vocal folds
   and lungs of a physical voice model, a Rust effect rack, and splices in a real *animal airway*
   (songbird, seal, alligator, elephant) that breathes with your specimen's words.
-- 👹 **3D Specimen with Voice Anatomy**: a sculpted monster (procedurally modelled in Blender)
-  rendered with PBR materials in a light studio. Its jaw, lips and tongue follow the engine's
-  articulators, its skin and horns, antennae, visor or ears follow the DNA, and **X-ray** mode
-  reveals the simulated airway tube, velum, vocal folds and breathing lungs.
+- 👹 **3D Specimens**: eight sculpted heads (ogre, demon, alien, robot, beast, skull, pumpkin,
+  patchwork), procedurally modelled in Blender with baked normal and detail maps and rendered
+  with PBR materials in a light studio. Their jaw, lips and tongue follow the engine's
+  articulators; the hide and the horns, antennae, visor or collar follow the DNA. Each preset
+  wears its own head, or the head follows the dominant strand.
 - 🗣️ **Text-to-Voice** in English, Indonesian, Spanish, raw IPA, and **Creature Tongue** (a
   deterministic alien language with three dialects).
 - 🎤 **Singing Studio**, 🥁 **Beatbox Maker** (live pads + 16-step sequencer), ⚗️ **Sound FX
@@ -31,7 +32,7 @@ React UI ── JSON ──▶ creature.wasm (UI instance)       planning, G2P p
    │
    └── AudioWorklet ──▶ creature.wasm                 live voice (Incubate pad, beatbox) +
                                                          mic morph monitor, 48 kHz
-3D Specimen (three.js) ◀── telemetry frames (jaw, lips, tongue, velum, folds, lungs, areas)
+3D Specimen (three.js) ◀── telemetry frames (jaw, lips, tongue, level)
 ```
 
 One wasm module (Rust, no imports) is compiled once and instantiated on all three threads. Long
@@ -51,7 +52,7 @@ npm run build         # typecheck + Vite build
 npx cap sync android
 cd android && ./gradlew assembleDebug                 # debug APK
 cd android && ./gradlew bundleRelease assembleRelease # signed release (needs android/keystore.properties)
-npm run model         # regenerate public/models/specimen.glb with Blender (headless)
+npm run model         # regenerate public/models/<kind>.glb with Blender (headless)
 ```
 
 Release signing reads `android/keystore.properties` (gitignored):
