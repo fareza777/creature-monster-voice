@@ -3,12 +3,10 @@ import { useEffect, useState } from "react";
 import { useApp } from "../../store/app.ts";
 import { audio } from "../../audio/audio.ts";
 import { F } from "../../engine/lab.ts";
-import { OrganCard, resetStageView, setXray } from "../components/Stage.tsx";
+import { OrganCard, resetStageView } from "../components/Stage.tsx";
 import { Icon } from "../icons.tsx";
 
 function Readouts() {
-  const [xray, setX] = useState(false);
-  useEffect(() => () => setXray(false), []);
   const [r, setR] = useState({ f0: 0, lvl: 0, jaw: 0, port: 0 });
   useEffect(() => {
     let raf = 0, n = 0;
@@ -38,9 +36,6 @@ function Readouts() {
         <div className="meter" aria-label="Output level">
           <i style={{ height: `${r.lvl * 100}%` }} />
         </div>
-        <button className={`btn small toggle-xray ${xray ? "on" : ""}`} onClick={() => (setX(!xray), setXray(!xray))} aria-label="X-ray anatomy">
-          X-ray
-        </button>
         <button className="btn icon small" onClick={resetStageView} aria-label="Reset view">
           {Icon.rotate}
         </button>

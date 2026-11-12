@@ -13,20 +13,20 @@ export interface Preset {
 const sp = (o: Partial<Specimen>): Specimen => ({ ...DEFAULT_SPECIMEN, human: 0, ...o });
 
 export const PRESETS: Preset[] = [
-  { id: "human", name: "Human Control", tagline: "The untouched sample", emoji: "🧑", specimen: sp({ human: 100 }) },
-  { id: "pumpkin-king", name: "Pumpkin King", tagline: "Kiroween's hollow-voiced host", emoji: "🎃", specimen: sp({ monster: 35, human: 50, alien: 15, echo: 0.25, size: -1, skin: "#e8590c" }) },
-  { id: "demon-lord", name: "Demon Lord", tagline: "Speaks from beneath the floor", emoji: "😈", specimen: sp({ monster: 90, human: 10, size: -3, reverb: 0.6, skin: "#b3122f" }) },
-  { id: "swamp-ogre", name: "Swamp Ogre", tagline: "Half beast, half bog", emoji: "👹", specimen: sp({ monster: 60, animal: 30, human: 10, species: "alligator", size: -1, rasp: 0.3 }) },
-  { id: "gamma-robot", name: "Gamma Robot", tagline: "Monotone, metallic, obedient", emoji: "🤖", specimen: sp({ robot: 85, human: 15 }) },
-  { id: "zeta", name: "Zeta Reticulan", tagline: "Greetings from the grey sector", emoji: "👽", specimen: sp({ alien: 80, human: 20, pitch: 2 }) },
-  { id: "werebeast", name: "Werebeast", tagline: "Barks between the words", emoji: "🐺", specimen: sp({ monster: 45, animal: 45, human: 10, species: "seal", rasp: 0.4 }) },
-  { id: "banshee", name: "Banshee", tagline: "A wail on the cold wind", emoji: "👻", specimen: sp({ alien: 35, human: 55, animal: 10, female: 1, breath: 0.7, reverb: 0.85, echo: 0.3, skin: "#dfe7f2" }) },
-  { id: "cyber-lich", name: "Cyber Lich", tagline: "Undead, upgraded", emoji: "💀", specimen: sp({ robot: 50, monster: 40, human: 10, reverb: 0.5 }) },
-  { id: "siren", name: "Siren of the Deep", tagline: "Sings sailors under", emoji: "🧜", specimen: sp({ animal: 35, human: 45, alien: 20, species: "songbird", female: 1, reverb: 0.6, skin: "#0e9fa8" }) },
-  { id: "tusk-titan", name: "Tusk Titan", tagline: "Trumpets the ground awake", emoji: "🐘", specimen: sp({ monster: 40, animal: 50, human: 10, species: "elephant", size: -2 }) },
-  { id: "goblin", name: "Goblin", tagline: "Small, sly, and loud", emoji: "👺", specimen: sp({ monster: 30, human: 55, alien: 15, child: 1, pitch: 4, rasp: 0.5 }) },
-  { id: "ghost-child", name: "Ghost Child", tagline: "Hums in empty halls", emoji: "🕯️", specimen: sp({ human: 70, alien: 30, child: 1, breath: 0.8, reverb: 0.9, skin: "#eef2ff" }) },
-  { id: "mecha-dragon", name: "Mecha Dragon", tagline: "Scales of steel, breath of fire", emoji: "🐉", specimen: sp({ robot: 40, monster: 40, animal: 20, species: "alligator", size: -2 }) },
+  { id: "human", name: "Human Control", tagline: "The untouched sample", emoji: "🧑", specimen: sp({ head: "frank", human: 100 }) },
+  { id: "pumpkin-king", name: "Pumpkin King", tagline: "Kiroween's hollow-voiced host", emoji: "🎃", specimen: sp({ head: "pumpkin", monster: 35, human: 50, alien: 15, echo: 0.25, size: -1, skin: "#e8590c" }) },
+  { id: "demon-lord", name: "Demon Lord", tagline: "Speaks from beneath the floor", emoji: "😈", specimen: sp({ head: "demon", monster: 90, human: 10, size: -3, reverb: 0.6, skin: "#b3122f" }) },
+  { id: "swamp-ogre", name: "Swamp Ogre", tagline: "Half beast, half bog", emoji: "👹", specimen: sp({ head: "ogre", monster: 60, animal: 30, human: 10, species: "alligator", size: -1, rasp: 0.3 }) },
+  { id: "gamma-robot", name: "Gamma Robot", tagline: "Monotone, metallic, obedient", emoji: "🤖", specimen: sp({ head: "robot", robot: 85, human: 15 }) },
+  { id: "zeta", name: "Zeta Reticulan", tagline: "Greetings from the grey sector", emoji: "👽", specimen: sp({ head: "alien", alien: 80, human: 20, pitch: 2 }) },
+  { id: "werebeast", name: "Werebeast", tagline: "Barks between the words", emoji: "🐺", specimen: sp({ head: "beast", monster: 45, animal: 45, human: 10, species: "seal", rasp: 0.4 }) },
+  { id: "banshee", name: "Banshee", tagline: "A wail on the cold wind", emoji: "👻", specimen: sp({ head: "skull", alien: 35, human: 55, animal: 10, female: 1, breath: 0.7, reverb: 0.85, echo: 0.3, skin: "#dfe7f2" }) },
+  { id: "cyber-lich", name: "Cyber Lich", tagline: "Undead, upgraded", emoji: "💀", specimen: sp({ head: "skull", robot: 50, monster: 40, human: 10, reverb: 0.5 }) },
+  { id: "siren", name: "Siren of the Deep", tagline: "Sings sailors under", emoji: "🧜", specimen: sp({ head: "alien", animal: 35, human: 45, alien: 20, species: "songbird", female: 1, reverb: 0.6, skin: "#0e9fa8" }) },
+  { id: "tusk-titan", name: "Tusk Titan", tagline: "Trumpets the ground awake", emoji: "🐘", specimen: sp({ head: "beast", monster: 40, animal: 50, human: 10, species: "elephant", size: -2 }) },
+  { id: "goblin", name: "Goblin", tagline: "Small, sly, and loud", emoji: "👺", specimen: sp({ head: "ogre", monster: 30, human: 55, alien: 15, child: 1, pitch: 4, rasp: 0.5 }) },
+  { id: "ghost-child", name: "Ghost Child", tagline: "Hums in empty halls", emoji: "🕯️", specimen: sp({ head: "skull", human: 70, alien: 30, child: 1, breath: 0.8, reverb: 0.9, skin: "#eef2ff" }) },
+  { id: "mecha-dragon", name: "Mecha Dragon", tagline: "Scales of steel, breath of fire", emoji: "🐉", specimen: sp({ head: "robot", robot: 40, monster: 40, animal: 20, species: "alligator", size: -2 }) },
 ];
 
 /** Skin swatches for the specimen (null: follow the DNA). */

@@ -6,7 +6,7 @@ import { audio } from "../audio/audio.ts";
 import { PRESETS, SONGS, SPEAK_SAMPLES, type Preset } from "./presets.ts";
 import { saveClip } from "./db.ts";
 import { haptic } from "../platform/native.ts";
-import type { Organ } from "../three/xray.ts";
+import type { Organ } from "../three/specimen.ts";
 
 export type Screen = "lab" | "dna" | "speak" | "studio" | "library" | "editor" | "about";
 export type StudioTab = "sing" | "beat" | "sfx" | "morph";

@@ -27,8 +27,8 @@ async function main() {
     startRenderer().catch((e) => console.error("renderer:", e));
     createRoot(document.getElementById("root")!).render(<App />);
     // automation hook for the ADB/DevTools test harness (tools/device.mjs, tools/mcp)
-    const [{ useApp }, { audio }, renderer, lab] = await Promise.all([import("./store/app.ts"), import("./audio/audio.ts"), import("./engine/renderer.ts"), import("./engine/lab.ts")]);
-    (window as unknown as Record<string, unknown>).__cvs = { useApp, audio, renderer, lab };
+    const [{ useApp }, { audio }, renderer, lab, { PRESETS: presets }] = await Promise.all([import("./store/app.ts"), import("./audio/audio.ts"), import("./engine/renderer.ts"), import("./engine/lab.ts"), import("./store/presets.ts")]);
+    (window as unknown as Record<string, unknown>).__cvs = { useApp, audio, renderer, lab, presets };
     await initNative();
     boot.classList.add("gone");
     setTimeout(() => boot.remove(), 600);

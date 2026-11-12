@@ -27,6 +27,8 @@ export interface Specimen {
   rate: number;
   /** optional skin colour for the 3D specimen (CSS hex); the engine ignores it */
   skin?: string;
+  /** optional 3D head (src/three/heads.ts); undefined: follows the dominant strand */
+  head?: string;
 }
 
 export const DEFAULT_SPECIMEN: Specimen = {

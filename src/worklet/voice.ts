@@ -56,6 +56,16 @@ class VoiceProcessor extends AudioWorkletProcessor {
   private load = 0;
   private level = 0;
   private creature: CreatureInfo | null = null;
+  /**
+   * Sleep: the physical engine is heavy for a phone's audio thread, and running it in silence
+   * starves clip playback (dropouts). It sleeps after a short silence once nothing is scheduled
+   * and wakes on any command that can make sound. While asleep its clock stands still, so
+   * gestures scheduled later keep their timing.
+   */
+  private gateLevel = 0;
+  private beatPlaying = false;
+  private quietBlocks = 0;
+  private awakeUntil = 0;
 
   constructor(options: { processorOptions: { module: WebAssembly.Module } }) {
     super();
@@ -103,7 +113,39 @@ class VoiceProcessor extends AudioWorkletProcessor {
     return v as T;
   }
 
+  private wake(seconds: number): void {
+    this.quietBlocks = 0;
+    this.awakeUntil = Math.max(this.awakeUntil, this.blocks + Math.ceil((seconds * sampleRate) / 128));
+  }
+
   private handle(m: ToVoice): void {
+    switch (m.type) {
+      case "gate":
+        this.gateLevel = m.level;
+        this.wake(0.5);
+        break;
+      case "schedule": {
+        let end = 0;
+        for (const g of m.gestures) end = Math.max(end, Number.isFinite(g.t1) ? g.t1 : 30);
+        this.wake(end + (m.lead ?? 0.03) + 0.4);
+        break;
+      }
+      case "beat":
+        if (m.playing !== undefined) this.beatPlaying = m.playing;
+        this.wake(0.5);
+        break;
+      case "beatHit":
+      case "call":
+      case "creature":
+      case "artic":
+      case "body":
+        this.wake(1.5);
+        break;
+    }
+    this.apply(m);
+  }
+
+  private apply(m: ToVoice): void {
     const x = this.x, h = this.h;
     switch (m.type) {
       case "body":
@@ -180,6 +222,14 @@ class VoiceProcessor extends AudioWorkletProcessor {
       return true;
     }
     const t0 = Date.now();
+    this.blocks++;
+    const asleep = this.gateLevel <= 0 && !this.beatPlaying && this.blocks > this.awakeUntil && this.quietBlocks > (0.4 * sampleRate) / 128;
+    if (asleep) {
+      for (const ch of out) ch.fill(0);
+      this.level *= 0.93;
+      this.load += 0.05 * (0 - this.load);
+      return true;
+    }
     try {
       const p = this.x.engine_render(this.h, ch0.length);
       if (this.rackOn) this.x.lab_rack_process(this.rack, p, ch0.length);
@@ -191,10 +241,11 @@ class VoiceProcessor extends AudioWorkletProcessor {
     let pk = 0;
     for (let i = 0; i < ch0.length; i++) pk = Math.max(pk, Math.abs(ch0[i]));
     this.level = Math.max(pk, this.level * 0.93);
+    this.quietBlocks = pk < 3e-4 ? this.quietBlocks + 1 : 0;
     for (let c = 1; c < out.length; c++) out[c].set(ch0);
     const budget = (ch0.length / sampleRate) * 1000;
     this.load += 0.05 * ((Date.now() - t0) / budget - this.load);
-    if (this.telemetryOn && !this.failed && ++this.blocks % 6 === 0) {
+    if (this.telemetryOn && !this.failed && this.blocks % 6 === 0) {
       try {
         this.postFrame();
       } catch (err) {

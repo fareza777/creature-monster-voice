@@ -265,6 +265,43 @@ struct VocalPlan {
     segments: Vec<Segment>,
     source: SourcePatch,
     rack: Option<RackParams>,
+    /// laughter: each vowel after an [h] is its own expiratory pulse (breath peak, falling
+    /// pitch, quiet aspirated gap), as the diaphragm drives a real laugh
+    pulses: Option<Pulses>,
+}
+
+#[derive(Clone, Copy)]
+struct Pulses {
+    /// breath multiplier at the first and the last pulse (a laugh builds)
+    from: f64,
+    to: f64,
+    /// breath in the [h] gaps
+    gap: f64,
+    /// pitch at the end of each pulse relative to its start
+    fall: f64,
+}
+
+/// Breath and pitch gestures that turn "h-a h-a h-a" into laughter: a pressure peak on every
+/// vowel, the breath held low through the aspirated gaps, and a pitch drop inside each pulse.
+fn add_pulses(plan: &mut Plan, p: &Pulses) {
+    use chimera::control::score::{ControlKey, Gesture, Targets};
+    let segs = &plan.segments;
+    let idx: Vec<usize> = (0..segs.len()).filter(|&i| text::is_vowel(&segs[i].ipa) && i > 0 && segs[i - 1].ipa == "h").collect();
+    let n = idx.len().max(1);
+    for (k, &i) in idx.iter().enumerate() {
+        let (t0, t1) = (segs[i].t0, segs[i].t1);
+        let dur = t1 - t0;
+        let peak = p.from + (p.to - p.from) * k as f64 / (n - 1).max(1) as f64;
+        plan.gestures.push(Gesture::new(t0 - 0.012, t1 - 0.25 * dur, 0.015, 0.4 * dur, 4.0, Targets::default().with(ControlKey::BREATH, peak)).label("laugh pulse"));
+        let h = &segs[i - 1];
+        plan.gestures.push(Gesture::new(h.t0 + 0.005, h.t1 - 0.01, 0.015, 0.015, 4.0, Targets::default().with(ControlKey::BREATH, p.gap)).label("laugh gap"));
+        // the pitch falls through the pulse: start a little above the planned target
+        let f = plan.gestures.iter().rev().find(|g| g.label.is_some_and(|l| l.as_str() == "pitch") && (g.t0 - t0).abs() < 1e-6).and_then(|g| g.targets.get(ControlKey::F0));
+        if let Some(f) = f {
+            plan.gestures.push(Gesture::new(t0, t0 + 0.35 * dur, 0.01, 0.03, 12.0, Targets::default().with(ControlKey::F0, f * 1.08)).label("pitch"));
+            plan.gestures.push(Gesture::new(t0 + 0.55 * dur, t1 + 0.02, 0.04, 0.03, 12.0, Targets::default().with(ControlKey::F0, f * p.fall)).label("pitch"));
+        }
+    }
 }
 
 fn seg(ipa: &str, dur: f64, f0: Option<f64>) -> Segment {
@@ -277,6 +314,7 @@ fn vocal_plan(kind: &str, seed: u32, f0_base: f64) -> VocalPlan {
     let fb = f0_base;
     let mut src = SourcePatch::default();
     let rack;
+    let mut pulses = None;
     let segments = match kind {
         "roar" => {
             src.pressure = Some(15.0);
@@ -287,36 +325,51 @@ fn vocal_plan(kind: &str, seed: u32, f0_base: f64) -> VocalPlan {
             vec![seg("ʁ", 0.14, Some(fb * 1.1)), seg("ɑ", v(&mut r, 0.35), Some(fb * 1.4)), seg("ɑ", 0.35, Some(fb * 1.1)), seg("ɑ", 0.35, Some(fb * 0.8)), seg("ɔ", v(&mut r, 0.4), Some(fb * 0.6))]
         }
         "growl" => {
-            src.pressure = Some(11.0);
+            // one continuous rumble from the back of the throat: no trills (a trill in a rough,
+            // low voice stalls into silence), the rack's growl does the rattling
+            src.pressure = Some(12.0);
             src.fry = Some(1.0);
             src.roughness = Some(0.9);
             rack = Some(RackParams { shift: -5.0, shift_mix: 1.0, sub: 0.6, growl: 0.9, growl_rate: 24.0, drive: 0.3, reverb: 0.2, ..Default::default() });
-            vec![seg("ɣ", 0.2, Some(fb * 0.7)), seg("ʌ", v(&mut r, 0.35), Some(fb * 0.7)), seg("r", 0.5, Some(fb * 0.65)), seg("ʌ", 0.3, Some(fb * 0.6)), seg("r", v(&mut r, 0.45), Some(fb * 0.55))]
+            vec![seg("ɣ", 0.16, Some(fb * 0.7)), seg("ʌ", v(&mut r, 0.45), Some(fb * 0.72)), seg("ɤ", v(&mut r, 0.4), Some(fb * 0.66)), seg("ʌ", v(&mut r, 0.45), Some(fb * 0.7)), seg("ɯ", v(&mut r, 0.35), Some(fb * 0.58))]
         }
         "laugh" => {
+            // a villain's laugh: a low "mwa", a run of chest pulses that climbs and builds, and
+            // a long falling "haaa" to finish. No echo: it would fill the gaps between pulses.
             src.pressure = Some(11.0);
-            src.roughness = Some(0.35);
-            rack = Some(RackParams { shift: -3.0, shift_mix: 1.0, reverb: 0.45, room: 0.9, echo: 0.25, ..Default::default() });
-            let mut s = vec![seg("m", 0.12, Some(fb * 1.6)), seg("w", 0.06, Some(fb * 1.7)), seg("ɑ", 0.32, Some(fb * 1.9))];
-            let n = 5 + (r.unit() * 3.0) as usize;
+            src.roughness = Some(0.4);
+            rack = Some(RackParams { shift: -3.0, shift_mix: 1.0, reverb: 0.3, room: 0.8, ..Default::default() });
+            pulses = Some(Pulses { from: 1.05, to: 1.45, gap: 0.35, fall: 0.86 });
+            let mut s = vec![seg("m", 0.11, Some(fb * 1.15)), seg("w", 0.05, Some(fb * 1.3)), seg("ɑ", 0.26, Some(fb * 1.45))];
+            let n = 6 + (r.unit() * 3.0) as usize;
             for i in 0..n {
-                let f = fb * (1.8 - 0.15 * i as f64);
-                s.push(seg("h", 0.07, None));
-                s.push(seg("ɑ", v(&mut r, 0.13), Some(f.max(fb * 0.6))));
+                let k = i as f64 / (n - 1) as f64;
+                // the pitch climbs to the middle of the run and sinks again
+                let f = fb * (1.35 + 0.35 * (k * core::f64::consts::PI).sin() - 0.1 * k) * (1.0 + 0.04 * r.bipolar() as f64);
+                s.push(seg("h", if i == 0 { 0.13 } else { v(&mut r, 0.075) }, None));
+                s.push(seg("ɑ", v(&mut r, 0.115), Some(f)));
             }
+            s.push(seg("h", 0.09, None));
+            s.push(seg("ɑ", 0.55, Some(fb * 1.6)));
+            s.push(seg("ɑ", 0.25, Some(fb * 1.0)));
             s
         }
         "cackle" => {
+            // a witch's "hee-hee-hee": fast, high, tense pulses with a shrill last one
             src.pressure = Some(10.0);
             src.tension = Some(0.85);
-            src.roughness = Some(0.4);
-            rack = Some(RackParams { shift: 3.0, shift_mix: 1.0, reverb: 0.4, ..Default::default() });
+            src.roughness = Some(0.45);
+            rack = Some(RackParams { shift: 3.0, shift_mix: 1.0, reverb: 0.3, ..Default::default() });
+            pulses = Some(Pulses { from: 1.1, to: 1.35, gap: 0.3, fall: 0.8 });
             let mut s = Vec::new();
-            for i in 0..8 {
-                s.push(seg("h", 0.05, None));
-                s.push(seg("i", v(&mut r, 0.1), Some(fb * (3.2 - 0.12 * i as f64))));
+            let n = 8 + (r.unit() * 3.0) as usize;
+            for i in 0..n {
+                let k = i as f64 / (n - 1) as f64;
+                s.push(seg("h", v(&mut r, 0.05), None));
+                s.push(seg(if i % 3 == 2 { "ɪ" } else { "i" }, v(&mut r, 0.085), Some(fb * (3.0 - 0.6 * k))));
             }
-            s.push(seg("i", 0.4, Some(fb * 2.2)));
+            s.push(seg("h", 0.06, None));
+            s.push(seg("i", 0.45, Some(fb * 3.4)));
             s
         }
         "moan" => {
@@ -327,6 +380,7 @@ fn vocal_plan(kind: &str, seed: u32, f0_base: f64) -> VocalPlan {
             vec![seg("u", v(&mut r, 0.7), Some(fb * 2.4)), seg("o", 0.6, Some(fb * 2.0)), seg("u", v(&mut r, 0.9), Some(fb * 2.3)), seg("o", 0.7, Some(fb * 1.8))]
         }
         "groan" => {
+            src.pressure = Some(11.0);
             src.fry = Some(0.9);
             src.breathiness = Some(0.4);
             src.roughness = Some(0.7);
@@ -363,7 +417,7 @@ fn vocal_plan(kind: &str, seed: u32, f0_base: f64) -> VocalPlan {
             s
         }
     };
-    VocalPlan { segments, source: src, rack }
+    VocalPlan { segments, source: src, rack, pulses }
 }
 
 // ------------------------------------------------------------------ the session
@@ -527,6 +581,7 @@ impl Session {
         let mut words = Vec::new();
         let mut transcription = String::new();
         let mut animal_species = design.species.clone();
+        let mut tight = false;
         let lead = 0.15;
 
         let new_engine = |d: &Design| {
@@ -629,12 +684,36 @@ impl Session {
             Job::Vocal { vocal, seed } => {
                 kind = "vocal".into();
                 let vp = vocal_plan(vocal, *seed, chimera::engine::default_f0(body) * design.source.f0_mul);
-                let plan = planner::plan_utterance(&vp.segments, &PlanOptions { body, t0: lead, f0: Some(design.source.f0), intonation: Some(Intonation::Flat), ..Default::default() });
+                let mut plan = planner::plan_utterance(&vp.segments, &PlanOptions { body, t0: lead, f0: Some(design.source.f0), intonation: Some(Intonation::Flat), ..Default::default() });
+                if let Some(p) = &vp.pulses {
+                    add_pulses(&mut plan, p);
+                }
                 let mut e = new_engine(&design);
                 apply_source(&mut e, &design, &vp.source);
                 e.schedule(&plan.gestures, 0.0, true);
                 if let Some(r) = vp.rack {
                     design.rack = merge_rack(&design.rack, &r);
+                }
+                // fricatives and creaky groans come out quiet, and quieter still from a smaller
+                // airway: lift them to the level of the voiced effects
+                let small = body.child + body.female * (1.0 - body.child);
+                design.rack.gain_db = clamp(
+                    design.rack.gain_db
+                        + match vocal.as_str() {
+                            "hiss" => 13.0 + 12.0 * small as f32,
+                            "groan" => 5.0 + 4.0 * small as f32,
+                            _ => 0.0,
+                        },
+                    -24.0,
+                    24.0,
+                );
+                if vp.pulses.is_some() {
+                    // laughter lives in its gaps: keep the specimen's timbre but not the long
+                    // tails and the compression that would fill them
+                    design.rack.reverb = design.rack.reverb.min(0.3);
+                    design.rack.echo = design.rack.echo.min(0.08);
+                    design.rack.drive *= 0.5;
+                    tight = true;
                 }
                 segments = plan.segments.iter().map(|s| Span { text: s.ipa.clone(), t0: s.t0, t1: s.t1 }).collect();
                 transcription = VOCALS.iter().find(|v| v.0 == vocal).map_or(vocal.clone(), |v| v.1.to_string());
@@ -708,7 +787,8 @@ impl Session {
             animal,
             animal_pitch,
             animal_ctele,
-            gate_env: Envelope::new(0.01, 0.12, fs as f32),
+            // the animal follows the breath; tight for laughter so it pulses with every "ha"
+            gate_env: if tight { Envelope::new(0.004, 0.035, fs as f32) } else { Envelope::new(0.01, 0.12, fs as f32) },
             animal_gate: 0.0,
             rack,
             out_lim: Limiter::new(fs as f32),

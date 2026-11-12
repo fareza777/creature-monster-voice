@@ -46,6 +46,8 @@ class AudioRuntime {
   private playStart = 0;
   private playOffset = 0;
   private stream: Stream | null = null;
+  /** gaps in streamed playback (the render fell behind), for device diagnostics */
+  underruns = 0;
   private endListeners = new Set<Listener>();
   // mic
   private mic: AudioWorkletNode | null = null;
@@ -241,6 +243,7 @@ class AudioRuntime {
     src.connect(this.master!);
     // an underrun leaves a short gap rather than overlapping audio
     const at = Math.max(st.nextTime, ctx.currentTime + 0.02);
+    if (st.scheduled > 0 && at > st.nextTime + 0.001) this.underruns++;
     src.start(at);
     st.nextTime = at + buf.duration;
     st.scheduled += pcm.length;
@@ -278,12 +281,13 @@ class AudioRuntime {
       return true;
     }
     st.queue.push(c.pcm);
-    // start as soon as the rest will render before playback reaches it
+    // start as soon as the rest will render before playback reaches it, with room for the
+    // render to slow down (a phone's cores throttle and the 3D view competes for them)
     const sr = st.sampleRate;
     const rendered = st.received / sr, total = st.total / sr;
     const rate = rendered / Math.max(0.05, (performance.now() - st.t0) / 1000);
     const remainingRender = (total - rendered) / Math.max(0.05, rate);
-    if (rendered >= 0.35 && remainingRender < total - 0.25 - rendered * 0.1) {
+    if (rendered >= 0.5 && remainingRender * 1.25 < total - 0.5) {
       st.started = true;
       st.nextTime = this.ctx.currentTime + 0.06;
       this.playStart = st.nextTime;

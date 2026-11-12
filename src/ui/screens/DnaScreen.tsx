@@ -2,6 +2,7 @@
 import { useState, type CSSProperties } from "react";
 import { useApp } from "../../store/app.ts";
 import { SKINS, STRANDS, SPECIES_INFO, type StrandKey } from "../../store/presets.ts";
+import { HEADS } from "../../three/heads.ts";
 import { SPECIES, type Specimen } from "../../engine/lab.ts";
 import { Panel, Slider, Sheet, pct, semis } from "../components/Controls.tsx";
 import { PresetCarousel, ShareBar } from "../components/Specimen.tsx";
@@ -115,6 +116,19 @@ export function DnaScreen() {
           ))}
         </div>
         <p className="sub">The chosen creature's physical airway breathes with your specimen's words and follows its melody in every render.</p>
+      </Panel>
+
+      <Panel title="Head" hint="Auto follows the strands">
+        <div className="chips">
+          <button className={`chip ${!sp.head ? "on" : ""}`} onClick={() => set({ head: undefined })}>
+            🧬 Auto
+          </button>
+          {HEADS.map((h) => (
+            <button key={h.id} className={`chip ${sp.head === h.id ? "on" : ""}`} onClick={() => set({ head: h.id })}>
+              {h.emoji} {h.name}
+            </button>
+          ))}
+        </div>
       </Panel>
 
       <Panel title="Skin" hint="DNA follows the strands">

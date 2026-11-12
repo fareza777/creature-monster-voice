@@ -25,3 +25,5 @@ android/keystore.properties
 
 # release artifacts are attached to GitHub releases, not committed
 release/
+
+__pycache__/

@@ -15,7 +15,7 @@
     "test": "cargo test -p creature-lab --release && node tools/wasm-check.mjs",
     "android": "npm run build:all && npx cap sync android",
     "mcp:adb": "node tools/mcp/adb-mcp.mjs",
-    "model": "C:/Blender/blender.exe -b --factory-startup --python tools/blender/build_specimen.py -- public/models/specimen.glb",
+    "model": "node tools/build-models.mjs",
     "icons": "node tools/make-icons.mjs"
   },
   "dependencies": {
