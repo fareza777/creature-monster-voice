@@ -1,0 +1,16 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Lab DSP tests on save",
+      "trigger": "PostFileSave",
+      "description": "Runs the creature-lab test suite (rack finiteness/level, G2P, SFX determinism, every render job) whenever lab or wasm Rust code is saved.",
+      "matcher": "crates[\\\\/]creature-(lab|wasm)[\\\\/].*\\.rs$",
+      "action": {
+        "type": "command",
+        "command": "cargo test -p creature-lab --release -q 2>&1 | tail -n 15",
+        "timeout": 600
+      }
+    }
+  ]
+}

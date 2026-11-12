@@ -1,0 +1,16 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "TypeScript typecheck on save",
+      "trigger": "PostFileSave",
+      "description": "Typechecks the app after any TypeScript save so type errors surface immediately.",
+      "matcher": "src[\\\\/].*\\.(ts|tsx)$",
+      "action": {
+        "type": "command",
+        "command": "npx tsc --noEmit 2>&1 | head -n 30",
+        "timeout": 180
+      }
+    }
+  ]
+}

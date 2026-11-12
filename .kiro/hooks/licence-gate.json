@@ -1,0 +1,16 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Licence gate for dependencies",
+      "trigger": "PostFileSave",
+      "description": "Fails loudly if a runtime dependency is missing from THIRD_PARTY_NOTICES.md or carries a disallowed (GPL / non-allow-listed LGPL) licence.",
+      "matcher": "(package\\.json|Cargo\\.toml|THIRD_PARTY_NOTICES\\.md)$",
+      "action": {
+        "type": "command",
+        "command": "node tools/check-licenses.mjs",
+        "timeout": 60
+      }
+    }
+  ]
+}

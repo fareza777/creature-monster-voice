@@ -1,0 +1,16 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Rebuild the 3D specimen",
+      "trigger": "PostFileSave",
+      "description": "Re-runs the headless Blender build so public/models/specimen.glb always matches the modelling script.",
+      "matcher": "tools[\\\\/]blender[\\\\/]build_specimen\\.py$",
+      "action": {
+        "type": "command",
+        "command": "C:/Blender/blender.exe -b --factory-startup --python tools/blender/build_specimen.py -- public/models/specimen.glb 2>&1 | grep -E \"faces|exported|Error|Traceback\"",
+        "timeout": 900
+      }
+    }
+  ]
+}

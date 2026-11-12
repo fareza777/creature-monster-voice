@@ -1,0 +1,27 @@
+node_modules/
+dist/
+target/
+out/
+*.wav
+*.mp3
+.DS_Store
+.shots/
+
+# build product of crates/creature-wasm (npm run wasm)
+src/engine/creature.wasm
+
+# Android build outputs and local config
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties
+android/capacitor-cordova-android-plugins/build/
+
+# signing secrets: never commit
+*.jks
+*.keystore
+*.p12
+android/keystore.properties
+
+# release artifacts are attached to GitHub releases, not committed
+release/

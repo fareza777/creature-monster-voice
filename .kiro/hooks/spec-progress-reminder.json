@@ -1,0 +1,14 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Keep the spec and devlog current",
+      "trigger": "Stop",
+      "description": "Reminds the agent at the end of each turn to update the task list and development log.",
+      "action": {
+        "type": "agent",
+        "prompt": "Before finishing: tick the completed items in .kiro/specs/creature-voice-studio/tasks.md, add a dated entry to docs/DEVLOG.md (what changed, what was verified and how, bugs found), and keep all copy in English."
+      }
+    }
+  ]
+}

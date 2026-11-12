@@ -1,0 +1,50 @@
+{
+  "name": "creature-voice-studio",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Creature Voice Studio: Monster Voice Laboratory — offline physical-model monster voice lab (F7 Developer)",
+  "license": "MIT",
+  "author": "F7 Developer",
+  "type": "module",
+  "scripts": {
+    "wasm": "cargo build -p creature-wasm --release --target wasm32-unknown-unknown && node tools/copy-wasm.mjs",
+    "dev": "vite --host 127.0.0.1",
+    "build": "tsc --noEmit && vite build",
+    "build:all": "npm run wasm && npm run build",
+    "typecheck": "tsc --noEmit",
+    "test": "cargo test -p creature-lab --release && node tools/wasm-check.mjs",
+    "android": "npm run build:all && npx cap sync android",
+    "mcp:adb": "node tools/mcp/adb-mcp.mjs",
+    "model": "C:/Blender/blender.exe -b --factory-startup --python tools/blender/build_specimen.py -- public/models/specimen.glb",
+    "icons": "node tools/make-icons.mjs"
+  },
+  "dependencies": {
+    "@breezystack/lamejs": "1.2.7",
+    "@capacitor/android": "8.6.0",
+    "@capacitor/app": "8.1.2",
+    "@capacitor/core": "8.6.0",
+    "@capacitor/filesystem": "8.1.5",
+    "@capacitor/haptics": "8.0.2",
+    "@capacitor/share": "8.0.3",
+    "@capacitor/splash-screen": "8.0.2",
+    "@capacitor/status-bar": "8.0.4",
+    "@fontsource/inter": "^5.3.0",
+    "@fontsource/space-grotesk": "^5.3.0",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "three": "0.187.0",
+    "zustand": "5.0.16"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "8.6.0",
+    "@modelcontextprotocol/sdk": "1.32.2",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@types/three": "0.187.0",
+    "@vitejs/plugin-react": "6.2.1",
+    "sharp": "^0.35.5",
+    "typescript": "7.0.2",
+    "vite": "8.3.7",
+    "zod": "4.6.7"
+  }
+}
