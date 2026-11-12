@@ -10,7 +10,7 @@ in real time.
   (songbird, seal, alligator, elephant) that breathes with your specimen's words.
 - 👹 **3D Specimens**: eight sculpted heads (ogre, demon, alien, robot, beast, skull, pumpkin,
   patchwork), procedurally modelled in Blender with baked normal and detail maps and rendered
-  with PBR materials in a light studio. Their jaw, lips and tongue follow the engine's
+  with PBR materials in a dark "Night Lab" studio. Their jaw, lips and tongue follow the engine's
   articulators; the hide and the horns, antennae, visor or collar follow the DNA. Each preset
   wears its own head, or the head follows the dominant strand.
 - 🗣️ **Text-to-Voice** in English, Indonesian, Spanish, raw IPA, and **Creature Tongue** (a
@@ -21,6 +21,36 @@ in real time.
   microphone recording.
 - ✂️ Clip editor, 🫙 project vault, WAV/MP3 export to Documents and the share sheet.
 - 100% offline: no INTERNET permission, no accounts, no ads, no paid APIs, no samples.
+
+## Try it
+
+- **Android 7.0+** (minSdk 24, targetSdk 36). Download the signed APK from
+  [Releases](https://github.com/fareza777/creature-monster-voice/releases), allow installing
+  from your browser or file manager, and open **Creature Voice Studio**.
+- No account, no network: the app has no INTERNET permission. The microphone is used only to
+  record your own voice for Voice Morphing.
+- Quick tour: **Lab** → tap *Roar*, *Laugh*, *Moan* or *Scream*. **DNA** → pick a specimen or
+  drag the five strands, then *Splice*. **Speak** → type a line and choose English, Indonesian,
+  Spanish, IPA or Creature Tongue. **Studio** → Sing, Beatbox, SFX, Morph. **Vault** → your clips
+  and projects, export WAV/MP3 or share.
+
+## The costume (Kiroween 2026: Costume Contest)
+
+The costume is for your voice, and the interface is the dressing room:
+
+- **The specimen is the readout.** The head on the pedestal speaks with the engine: its jaw,
+  lips and tongue move from the articulator telemetry of the voice you hear, its eyes blink and
+  follow your finger, and the pedestal ring glows with the level. The Lab shows the live pitch,
+  jaw opening and whether the nasal port is open or sealed.
+- **Splicing changes the creature you see.** The DNA strands grow horns, antennae, a visor or a
+  collar and recolour the hide as you drag them; each preset (Swamp Ogre, Demon Lord, Zeta Reticulan,
+  Gamma Robot, Werebeast, Pumpkin King, Cyber Lich, ...) wears its own sculpted head.
+- **A Night Lab interface.** Near-black glass lit by ultraviolet and toxic green, and the colours
+  mean something: toxic green is what is live (readouts, active tabs, *Splice*, playback
+  progress, the incubator while a voice renders), ultraviolet is what you chose. DNA sliders glow
+  in their strand's colour, and the plinth's ring and floor glow pulse with the voice.
+- **Lab language instead of settings.** *Splice*, *Incubate*, *Specimen*, *Vault*: the mad-lab
+  vocabulary is the navigation.
 
 ## How it works
 

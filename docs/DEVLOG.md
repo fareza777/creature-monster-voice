@@ -1,5 +1,73 @@
 # Dev log
 
+## 2026-11-12 (night) - "Night Lab" dark theme
+
+### What changed
+- `src/ui/styles.css`: the light theme is replaced by a dark "Night Lab" theme. Every colour is
+  now a token in `:root` (near-black `--bg #05070d`, glass panels, `--violet #a45bff`,
+  `--toxic #39ff88`, cyan, blood, amber, pumpkin, text levels, glows); the rules use only
+  variables. Toxic green marks live state (Lab readouts in a monospace face, active chips and
+  tabs, Splice, playback progress, the incubator fluid), ultraviolet marks selection and primary
+  actions. Panels read as lab monitors (blinking status dot), DNA sliders and strand icons glow
+  in their strand colour, the share bar glows, a vignette frames the stage, and the stage has an
+  ultraviolet spotlight and a green floor mist. The vault's empty-state icon is now sized (it
+  rendered huge).
+- `src/three/specimen.ts`: night-lab lighting (dimmer environment, cool key, ultraviolet and
+  toxic-green rims, low fill), an obsidian plinth with brass trims, a darker contact shadow, and
+  an additive glow pool on the floor that takes the iris colour and follows the voice level like
+  the ring.
+- Spores (`Particles.tsx`) recoloured and made smaller and brighter for the dark.
+- Native chrome: status bar and window/splash backgrounds `#05070d` with light status icons
+  (`capacitor.config.ts`, `lifecycle.ts`, `res/values/styles.xml`, `index.html`);
+  `tools/make-icons.mjs` now draws dark splash screens and store art (regenerated).
+- Spec and steering brought up to date: R3 is now "Interactive 3D Specimen" (the anatomy
+  hologram was removed earlier), R10.1 describes the Night Lab theme and AA contrast,
+  `design.md` §4/§5, `product.md`, `structure.md` and `specimen-3d.md` updated.
+
+### Verified, and how
+- Contrast on `--bg`: ink 18:1, text 15.6:1, dim 8.1:1, faint 5:1 (4.6:1 on surfaces); white on
+  the primary button gradient ≥ 4.8:1; dark text on toxic green 14:1.
+- Web build previewed in headless Chrome at 393×873 (Lab, DNA, Speak, Studio, Vault): no console
+  errors.
+- On the phone (Redmi Note 11, `69f664ea`): the debug APK installed over the previous debug build with `adb install -r` (app data kept; a `run-as` tar backup was taken first). Screenshots of Lab, DNA (library and strands), Speak, Studio and Vault look as intended: status and navigation bars dark, readouts and active states toxic green, the plinth glow visible.
+
+- `npm run build` (typecheck + Vite), `npx cap sync android`, `gradlew bundleRelease
+  assembleRelease assembleDebug` (with `--no-daemon --max-workers=2`, 1.25 GB heap, because of
+  low free RAM): success. `cargo test -p creature-lab --release`: 13 passed.
+  `tools/wasm-check.mjs`: 0 imports, 56 exports. `tools/check-licenses.mjs`: all allowed.
+- Release APK signed by CN=F7 Developer (`apksigner verify`).
+
+### Bugs and issues found
+- The vault empty state showed the save icon at full width (an unsized inline SVG). Fixed.
+- The Lab's quick chips still scroll under the Splice button (unchanged).
+
+## 2026-11-12 (evening) - Kiroween submission prep: docs and a fresh release build
+
+### What changed
+- LICENSE: the CHIMERA notice is now a plain second copyright line and the trailing pointer
+  to THIRD_PARTY_NOTICES.md is gone, so GitHub can detect the licence as MIT (it showed
+  "Other / NOASSERTION").
+- New docs/KIRO.md and docs/ARCHITECTURE.md (the README already linked to both, but they
+  did not exist), and docs/PROCESS.md with a bug log. Task 7.2 ticked.
+- README: "Try it" and "The costume" sections.
+- .kiro/settings/mcp.json: the workspace MCP config (copy of docs/kiro/mcp.json;
+  	ools/mcp/adb-mcp.mjs already said it was configured there).
+- Signed release APK and AAB rebuilt from 82e628a (the previous ones were from 11 November).
+
+### Verified, and how
+- 
+pm run typecheck: clean. 	ools/check-licenses.mjs: 15 runtime dependencies, all allowed.
+  	ools/wasm-check.mjs: 0 imports, 56 exports. cargo test -p creature-lab --release: 13 passed.
+- 
+pm run build, 
+px cap sync android, gradlew bundleRelease assembleRelease: success.
+  pksigner verify: signed by CN=F7 Developer. minSdk 24, targetSdk 36. APK 17.6 MB.
+
+### Bugs and issues found
+- The first Gradle run died ("daemon disappeared") with ~500 MB of free RAM on this PC; it
+  passed with --no-daemon --max-workers=2 and a 1.25 GB heap.
+- Not changed: the light theme. The design (design.md section 5) and R10.1 describe a dark
+  monster-lab theme; the app ships a light one.
 ## 2026-11-12 — Eight creature heads, real laughter, smooth playback
 
 ### What changed
