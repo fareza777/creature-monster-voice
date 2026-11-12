@@ -52,6 +52,15 @@
   run `tools/build-models.mjs` in the foreground.
 - The heads tour needs ~9 s per preset on the emulator, or the shot catches the previous head
   mid-swap.
+
+### Status review (later the same day, no code changes)
+- Nothing new to tick in `tasks.md`: 7.2 (docs) and 7.3 (demo video) stay open.
+- Not yet verified by ear: the vocal changes were checked only by envelope/level analysis.
+  Roar, moan, scream, snarl, chant and speech were not changed. A listening pass on the phone
+  is next.
+- Open polish items: the pumpkin's eyes read as yellow balls instead of candle light, the beast's
+  muzzle is short, the robot's eyes are small, the ogre's cheeks are still lumpy, and the debug
+  APK is ~32 MB with eight heads.
 ## 2026-11-11 — Specimen fillet pass shipped to the device
 
 ### What changed
